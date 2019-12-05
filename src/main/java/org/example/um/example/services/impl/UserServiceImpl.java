@@ -131,4 +131,55 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * This will retrieve a user object based on the id and will update any field provided that is not null.
+	 */
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public User update(String id, String firstName, String lastName, String email, Boolean mailVerified, String username) {
+		log.info("update invoked for id: {} and fields: firstName={}, lastName={}, email={}, mailVerified={}, username={}", id, firstName, lastName, email, mailVerified, username);
+
+		Optional<User> userOpt = repo.findById(id);
+
+		if (userOpt.isEmpty()) {
+			throw new EntityNotFoundException("The specified user does not exist.");
+		}
+
+		User user = userOpt.get();
+
+		if (firstName != null) {
+			user.setFirstName(firstName.trim().isEmpty()? null: firstName);
+		}
+
+		if (lastName != null) {
+			user.setLastName(lastName.trim().isEmpty()? null: lastName);
+		}
+
+		if (email != null) {
+			user.setEmail(email.trim().isEmpty()? null: email);
+			user.setEmailVerified(false);
+		}
+
+		if (mailVerified != null) {
+			user.setEmailVerified(mailVerified);
+		}
+
+		if (username != null) {
+			if (username.trim().isEmpty()) {
+				throw new RuntimeException("Username cannot be left blank!");
+			}
+
+			User userTest = repo.findByUsername(username);
+			if (userTest != null) {
+				throw new RuntimeException("Username already taken!");
+			}
+
+			user.setLastName(username);
+		}
+
+		log.debug("Returning updated user: {}", user);
+
+		return user;
+	}
+
 }
