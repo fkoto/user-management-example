@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  mysql-docker-container:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=demo
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+    volumes:
+      - /home/foivos/Desktop/data/mysql
+    ports:
+    - 3306:3306
+    expose:
+    - 3306
+    container_name: demo-db
+  user-management-app:
+    image: demo-image
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql-docker-container
+    ports:
+      - 8080:8080
+    volumes:
+      - /home/foivos/Desktop/data/spring-boot-app
+    container_name: demo-app
