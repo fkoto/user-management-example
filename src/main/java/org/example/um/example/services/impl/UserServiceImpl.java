@@ -182,4 +182,27 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public List<User> search(String firstName, String lastName) {
+		log.info("search invoked with: firstName={}, lastName={}", firstName , lastName);
+
+		List<User> result;
+
+		if ((firstName == null || firstName.trim().isEmpty()) && (lastName == null || lastName.trim().isEmpty())) {
+			throw new RuntimeException("No search criteria provided!");
+		}
+
+
+		if (firstName != null && lastName != null) {// both criteria provided
+			result = repo.findByFirstNameContainingAndLastNameContaining(firstName, lastName);
+		}else if (firstName != null){ // only firstname provided
+			result = repo.findByFirstNameContaining(firstName);
+		}else { // only lastname provided
+			result = repo.findByLastNameContaining(lastName);
+		}
+
+		log.debug("search results are: {}", result);
+		return result;
+	}
+
 }

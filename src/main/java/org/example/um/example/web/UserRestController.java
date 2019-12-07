@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("userRestController")
@@ -52,6 +53,12 @@ public class UserRestController {
 	@PutMapping("/{id}/update")
 	public User updateUser(@PathVariable("id") String id, @RequestBody UserDTO request) {
 		return service.update(id, request.getFirstName(), request.getLastName(), request.getEmail(), request.getEmailVerified(), request.getUsername());
+	}
+
+	// search methods
+	@GetMapping("/search")
+	public List<User> search(@RequestParam(name = "firstname", required = false) String firstname, @RequestParam(name = "lastname", required=false) String lastname){
+		return service.search(firstname, lastname);
 	}
 
 }

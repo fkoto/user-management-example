@@ -19,4 +19,6 @@ public interface UserService {
 	public User createUser(String firstName, String lastName, String email, Boolean mailVerified, String username);
 
 	public User update(String id, String firstName, String lastName, String email, Boolean mailVerified, String username);
+
+	public List<User> search(String firstName, String lastName);
 }
