@@ -14,7 +14,7 @@
   </parent>
   
   <properties>
-  	<spring.version>2.2.1.RELEASE</spring.version>
+  	<spring.version>2.5.12</spring.version>
   	<java.version>11</java.version>
   </properties>  
   
